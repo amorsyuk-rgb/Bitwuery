@@ -19,21 +19,24 @@ app.get('/api/bitquery', (req, res) => {
   };
 
   const query = `
-    query ($network: evm_network, $limit: Int) {
-      EVM(network: $network, dataset: realtime) {
-        Blocks(limit: {count: $limit}, orderBy: {descending: Block_Time}) {
-          Block {
-            Number
-            Time
-            TxCount
-            GasUsed
-            BaseFee
-          }
-          ChainId
-        }
+  query {
+    ethereum {
+      blocks(
+        limit: {count: 5}
+        orderBy: {descending: block_number}
+      ) {
+        block_number
+        timestamp { time }
+        transaction_count
+        gas_used
+        base_fee_per_gas
+        hash
       }
     }
-  `;
+  }
+`;
+
+const postData = JSON.stringify({ query });
 
   const postData = JSON.stringify({
     query,
