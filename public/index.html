@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Bitquery Test</title>
+  <style>
+    body { font-family: monospace; background: #111; color: #0f0; padding: 20px; }
+    pre { background: #222; padding: 15px; border-radius: 8px; overflow-x: auto; }
+    button { padding: 10px 20px; font-size: 16px; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <h2>🧠 Bitquery Ethereum Blocks (Render Live)</h2>
+  <button onclick="loadData()">Fetch Latest</button>
+  <pre id="output">Loading...</pre>
+
+  <script>
+    async function loadData() {
+      const out = document.getElementById('output');
+      out.textContent = "Fetching data...";
+      try {
+        const res = await fetch('/api/bitquery');
+        const data = await res.json();
+        out.textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        out.textContent = '❌ Error: ' + e.message;
+      }
+    }
+    loadData();
+  </script>
+</body>
+</html>
