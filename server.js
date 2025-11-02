@@ -18,20 +18,21 @@ app.get('/api/bitquery', (req, res) => {
     }
   };
 
-  // ✅ Updated GraphQL query for Bitquery v2 API
+  // ✅ Corrected Bitquery query using EVM dataset
   const query = `
-    query {
-      ethereum {
-        blocks(
+    {
+      EVM(dataset: archive, network: eth) {
+        Blocks(
           limit: {count: 5}
-          orderBy: {descending: block_number}
+          orderBy: {descending: Block_Number}
         ) {
-          block_number
-          timestamp { time }
-          transaction_count
-          gas_used
-          base_fee_per_gas
-          hash
+          Block {
+            Number
+            Time
+            Hash
+            GasUsed
+            TxCount
+          }
         }
       }
     }
@@ -41,11 +42,15 @@ app.get('/api/bitquery', (req, res) => {
 
   const request = https.request(options, (upRes) => {
     let data = '';
-    upRes.on('data', chunk => data += chunk);
+    upRes.on('data', chunk => (data += chunk));
     upRes.on('end', () => {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Content-Type', 'application/json');
-      res.send(data);
+      try {
+        res.send(JSON.parse(data)); // send parsed JSON
+      } catch {
+        res.send(data); // fallback raw text
+      }
     });
   });
 
