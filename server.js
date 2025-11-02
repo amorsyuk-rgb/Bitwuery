@@ -14,24 +14,25 @@ app.get('/api/bitquery', (req, res) => {
     path: '/',
     headers: {
       'Content-Type': 'application/json',
+      // ⚠️ Replace with your valid Bitquery API key if needed
       'Authorization': 'Bearer ory_at_7hfMB8cdejHviJ_DxcOdek5a7TXOPZDsx53rFh8toQ8.y7lsBUrh4CZ7ZSqI4FU4EJk2RKP0bIdfqMLWzflgapA'
     }
   };
 
-  // ✅ Corrected Bitquery query using EVM dataset
+  // ✅ Correct Bitquery EVM query (as of 2025)
   const query = `
-    {
-      EVM(dataset: archive, network: eth) {
-        Blocks(
-          limit: {count: 5}
-          orderBy: {descending: Block_Number}
-        ) {
-          Block {
-            Number
-            Time
-            Hash
-            GasUsed
-            TxCount
+    query {
+      ethereum(network: eth) {
+        blocks(options: {limit: 5, desc: "height"}) {
+          height
+          hash
+          timestamp {
+            time
+          }
+          transactionCount
+          gasUsed
+          miner {
+            address
           }
         }
       }
@@ -47,9 +48,9 @@ app.get('/api/bitquery', (req, res) => {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Content-Type', 'application/json');
       try {
-        res.send(JSON.parse(data)); // send parsed JSON
+        res.send(JSON.parse(data));
       } catch {
-        res.send(data); // fallback raw text
+        res.send(data);
       }
     });
   });
