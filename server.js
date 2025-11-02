@@ -14,15 +14,15 @@ app.get('/api/bitquery', (req, res) => {
     path: '/',
     headers: {
       'Content-Type': 'application/json',
-      // ⚠️ Replace with your valid Bitquery API key if needed
+      // ⚠️ Replace with your valid Bitquery token if needed
       'Authorization': 'Bearer ory_at_7hfMB8cdejHviJ_DxcOdek5a7TXOPZDsx53rFh8toQ8.y7lsBUrh4CZ7ZSqI4FU4EJk2RKP0bIdfqMLWzflgapA'
     }
   };
 
-  // ✅ Correct Bitquery EVM query (as of 2025)
+  // ✅ Corrected GraphQL Query (2025 schema, valid network enum)
   const query = `
     query {
-      ethereum(network: eth) {
+      ethereum(network: ethereum) {
         blocks(options: {limit: 5, desc: "height"}) {
           height
           hash
