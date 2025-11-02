@@ -18,30 +18,26 @@ app.get('/api/bitquery', (req, res) => {
     }
   };
 
+  // ✅ Updated GraphQL query for Bitquery v2 API
   const query = `
-  query {
-    ethereum {
-      blocks(
-        limit: {count: 5}
-        orderBy: {descending: block_number}
-      ) {
-        block_number
-        timestamp { time }
-        transaction_count
-        gas_used
-        base_fee_per_gas
-        hash
+    query {
+      ethereum {
+        blocks(
+          limit: {count: 5}
+          orderBy: {descending: block_number}
+        ) {
+          block_number
+          timestamp { time }
+          transaction_count
+          gas_used
+          base_fee_per_gas
+          hash
+        }
       }
     }
-  }
-`;
+  `;
 
-const postData = JSON.stringify({ query });
-
-  const postData = JSON.stringify({
-    query,
-    variables: { network: 'eth', limit: 5 }
-  });
+  const postData = JSON.stringify({ query });
 
   const request = https.request(options, (upRes) => {
     let data = '';
